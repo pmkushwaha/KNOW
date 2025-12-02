@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}
+Django CRUD
+{% endblock  %}
+
+{% block content %}
+<h1 class="text-center mt-4 mb-4">Welcome to KNOW</h1>
+
+
+{% comment %} button to create tweet {% endcomment %}
+<a class="btn btn-primary mb-4"role="button" href=" {% url 'tweet_create' %}" aria-disabled="true">Create a Post</a>
+
+<div class="container row gap-3">
+{%for tweet in tweets%}
+{% comment %} caard for tweet {% endcomment %}
+<div class="card shadow-sm p-0" style="width: 18rem;">
+     
+     <img src="{{ tweet.photo.url }}" class="card-img-top" alt="tweet-image">
+    <div class="card-body">
+      <h5 class="card-title">{{tweet.user.username}}</h5>
+     <p class="card-text">{{ tweet.text }}</p>
+       {% if tweet.user == user %}
+                <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary btn-sm me-2">Edit Post</a>
+                <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger btn-sm">Delete Post</a>
+            {% endif %}
+    </div>
+  </div>
+{%endfor %}
+
+</div>
+
+{% endblock %}  
+ 
