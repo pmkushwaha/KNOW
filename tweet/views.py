@@ -1,6 +1,9 @@
+ 
+ 
 from django.shortcuts import render
-from .models import Tweet
+from .models import Profile, Tweet
 from .forms import tweetForm
+from .forms import ProfileForm
 from django.shortcuts import get_object_or_404,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -8,6 +11,30 @@ from .forms import UserRegistrationForm
 # home view
 def index(request):
     return render(request ,'index.html')
+
+#user profile
+ 
+
+@login_required
+def user_profile(request):
+    profile,created = Profile.objects.get_or_create(user=request.user)
+    return render(request, 'user_profile.html', {'profile': profile})
+ 
+@login_required
+def edit_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile')
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
+
 
 # list of tweets view0
 @login_required
@@ -34,19 +61,6 @@ def tweet_create(request):
 
 # To Edit the tweet 
 @login_required
-# def tweet_edit(request,tweet_id):
-#     tweet=get_object_or_404(Tweet,pk=tweet_id,user=request.user)  #to get the details of the user 
-#     if request.method=="POST":
-#         tweet=tweetForm(request.POST,request.FILES,instance=tweet)
-#         if tweet.is_valid():
-#             tweet=tweet.save(commit=False)
-#             # to get the user
-#             tweet.user=request.user
-#             tweet.save()  #final save
-#             return redirect('tweet_list')
-#     else:
-#         form=tweetForm(instance=tweet)
-#     return render(request,"tweet_form.html",{'form':form})
 def tweet_edit(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id ,user=request.user)  # Fetch the existing tweet
     
@@ -77,7 +91,7 @@ def register(request):
             user.set_password(form.cleaned_data['password1'])
             user.save()
             login(request,user)
-            return redirect('tweet_list')
+            return redirect('Tweet_list')
     else:
         form=UserRegistrationForm()
     return render(request ,'registration/register.html',{'form': form})
