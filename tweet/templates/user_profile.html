@@ -1,20 +1,17 @@
-{% extends "layout.html" %}
-{% block title %}
-KNOW
-{% endblock  %}
-
+{% extends "layout.html" %} 
+ 
 {% block content %}
-<img src="{{ profile.profile_photo.url }}">
 
-<p><strong>User Name:</strong> {{ profile.user.username }}</p>
-<p><strong>User ID:</strong> {{profile.user_id}}</p>
+<div class="container mt-5 card p-4 shadow-sm" style="max-width: 450px" >
+    <h2 class="mb-5  ">User Profile</h2>
+ <img src="{{profile.profile_photo.url}}"" alt="Profile photo of User"
+  class="rounded-circle img-fluid" style="width:120px; height:120px;
+  object-fit:cover; border:3px solid #fff; box-shadow:0 2px 8px
+  rgba(0,0,0,.15);">   
+ 
+  <p><strong>User Name:</strong> {{ profile.user.username }}</p>
+  <p><strong>Email ID:</strong> {{profile.user.email}}</p>
 
-<a href="{% url 'edit_profile' %}">Edit Profile</a> 
+  <a href="{% url 'edit_profile' %}" class="btn btn-primary btn-sm me-2">Edit Profile</a>
+</div>
 {% endblock %}
-
-{% comment %} <img src="{{ profile.profile_photo.url }}" width="150" height="150" style="border-radius:50%;">
-
-<p><strong>User Name:</strong> {{ profile.user.username }}</p>
-<p><strong>User ID:</strong> {{ profile.user_id }}</p>
-
-<a href="{% url 'edit_profile' %}">Edit Profile</a> {% endcomment %}
